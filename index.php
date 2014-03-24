@@ -13,8 +13,12 @@
 <hr>
 
 <?php
-	$uploaddir = getcwd().'/uploads/in/';
-    $downloaddir = getcwd().'/uploads/out/';
+	if (!file_exists(getcwd().'/uploads/')) {
+		mkdir(getcwd().'/uploads/', 0777,true);
+	}
+	
+	$uploaddir = getcwd().'/uploads/';
+    $downloaddir = getcwd().'/uploads/';
 
 	if (move_uploaded_file($_FILES['userfile']['tmp_name'], $uploaddir.$_FILES['userfile']['name'])) 
 	{
@@ -58,7 +62,7 @@
 		fclose($fp);
 
 		echo "<h4>You can download file hear</h4><hr>";
-		echo "<a href=uploads/out/".$_FILES['userfile']['name'].'.out'." target='_blank'>Download Link</a>";
+		echo "<a href=uploads/".$_FILES['userfile']['name'].'.out'." target='_blank'>Download Link</a>";
 	
 	} else {
 	    print "There some errors!";
