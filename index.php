@@ -32,9 +32,9 @@
 	    
 	    foreach ($autors as $key => $value) {
 	    	$arr[$key] = array(
-	    		// 'items'  => $pars_data->items['raw'],
+	    		'type'  => $pars_data->types[$key],
 			    'autors' => $pars_data->items['author'][$key],
-			    'volume' => $pars_data->items['volume'][$key]?'Vol. '.$pars_data->items['volume'][$key]:'',
+			    'volume' => $pars_data->items['volume'][$key],
 			    'year'   => $pars_data->items['year'][$key],
 			    'title'  => $pars_data->items['title'][$key],
 			    'pages'  => $pars_data->items['pages'][$key],
@@ -54,7 +54,10 @@
 	    $fp = fopen($downloaddir.$_FILES['userfile']['name'].'.out', 'a');
 	    chmod($downloaddir.$_FILES['userfile']['name'].'.out', 0777);
 			foreach ($arr as $key => $value) {
-				$result_str = convertFio($value['autors']).' '.$value['title'].' '.$value['journal'].' '.$value['volume'].' '.$value['number'].' '.$value['publisher'].' '.$value['year'].' '.$value['pages'];
+				if ($value['type'] =='articl') {
+					$result_str = "[$key] ".convertFio($value['autors']).' '.$value['title'].' '.$value['journal'].' '.$value['volume'].' '.$value['number'].' -- '.$value['year'].' -- pp. '.$value['pages'];
+				}else
+					$result_str = "[$key] ".convertFio($value['autors']).' '.$value['title'].', Vol. '.$value['volume'].' '.$value['number'].' '.$value['publisher'].' '.$value['year'].' '.$value['pages'];
 				echo $result_str.'<br>';
 				fwrite($fp, $result_str."\n");  
 				# code...
@@ -73,13 +76,16 @@
 	function convertFio($string_fio)
     {
     	$result = '';
+    	$i = 0;
     	$items = explode('and',$string_fio);
     	foreach ($items as $key => $value) {
     		$parts = explode(" ", trim($value));
+    		$result .= ($i>0) ? ', ' : '' ;
 	        $result .= ' '.$parts[0].' ';
 	        $result .= substr($parts[1], 0, 1) . '.';
 	        if(isset($parts[2]))
 	        	$result .= substr($parts[2], 0, 1) . '.';
+	        $i++;
 	    }
 	    return $result;
     }
