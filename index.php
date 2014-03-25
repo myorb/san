@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Sun francisco)</title>
+	<title>San francisco)</title>
 	
 </head>
 <body>
@@ -49,9 +49,9 @@
 	    echo "<pre>";
 	    // print_r($arr);
 	    echo "</pre>";
-	    
+	    $file_short_name = explode('.', $_FILES['userfile']['name']);
 	    //create file
-	    $fp = fopen($downloaddir.$_FILES['userfile']['name'].'.out', 'a');
+	    $fp = fopen($downloaddir.$file_short_name[0].'.out', 'a');
 	    chmod($downloaddir.$_FILES['userfile']['name'].'.out', 0777);
 			foreach ($arr as $key => $value) {
 				if ($value['type'] =='articl') {
@@ -63,9 +63,10 @@
 				# code...
 			}
 		fclose($fp);
-
-		echo "<h4>You can download file hear</h4><hr>";
-		echo "<a href=uploads/".$_FILES['userfile']['name'].'.out'." target='_blank'>Download Link</a>";
+		
+		
+ 		echo "<h4>You can download file hear</h4><hr>";
+		echo "<a href=uploads/".$file_short_name[0].'.out'." target='_blank'>Download Link</a>";
 	
 	} else {
 	    print "There some errors!";
